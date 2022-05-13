@@ -129,4 +129,4 @@ dmypy.json
 .pyre/
 
 # Open World Weather API config file
-# config.py
+config.py
