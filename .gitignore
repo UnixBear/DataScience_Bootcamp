@@ -134,3 +134,5 @@ config.py
 # files over 100 MB
 ratings.csv
 
+# removing path for conda libraries to avoid unnecessary bloat
+SAMPle_proj/env
