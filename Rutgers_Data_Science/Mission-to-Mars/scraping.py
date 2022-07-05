@@ -24,6 +24,7 @@ def scrape_all():
     
     #finish the session
     browser.quit()
+    return data
     
 
 def mars_news(browser):
@@ -78,6 +79,8 @@ def featured_image(browser):
     # Use the base url to create an absolute url
     img_url = f'https://spaceimages-mars.com/{img_url_rel}'
     return img_url
+
+
 def mars_facts():
     # ## Mars Facts
     try:
