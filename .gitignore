@@ -131,6 +131,9 @@ dmypy.json
 # Open World Weather API config file
 config.py
 
+# Mapbox API config
+config.js
+
 # files over 100 MB
 ratings.csv
 
