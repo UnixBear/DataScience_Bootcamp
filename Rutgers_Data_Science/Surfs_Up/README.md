@@ -1,20 +1,77 @@
-### Overview
-The purpose of this analysis is to give those who want to possibiliy build a surf
-shack a sense of feasibility.  Looking at extreme ends of the year (June and December)
-and seeing how they change over both the month and generally over the years to give a
-best case and worse case scenario on opening up the business.
+# OpenAPI with Flask for Surf's Up
 
-![Alt text](resources/summary_of_December.png?raw=true "December")
+> This code base serves as starting point for writing your next Flask application delivering observed weather patterns from Hawaii. BUT I REALLY JUST WANTED TO FOCUS ON FLASK AND APIs!
 
-![Alt text](resources/summary_of_June.png?raw=true "June")
+## New Flask Project
 
-## Interesing data worth noticing:
+Its not just Flask but an ecosystem to properly create a RESTful API service... SO FILE app_refactored.py is that using:
 
-1) Looking at both, the standard deviation is only about 3.75 degrees.  In June, the average temperature was 75 degrees with the upper quartile being 77 degrees, well within the standard deviation which means that in general in June we have fairly constant good whether from 72 to 78 degrees
+- [Flask](https://flask.palletsprojects.com/en/1.1.x/) is a lightweight WSGI web application framework in Python. It is designed to make getting started very quickly and very easily.
+- [marshmallow](https://marshmallow.readthedocs.io/en/stable/) is an ORM/ODM/framework-agnostic library for converting complex datatypes, such as objects, to and from native Python datatypes.
+- [Flask-Marshmallow](https://flask-marshmallow.readthedocs.io/en/latest/) is a thin integration layer for Flask and marshmallow that adds additional features to marshmallow.
+- [SQLAlchemy](https://www.sqlalchemy.org/library.html) is the Python SQL toolkit and Object Relational Mapper that gives application developers the full power and flexibility of SQL.
+- [Flask-SQLAlchemy](https://flask-sqlalchemy.palletsprojects.com/en/2.x/) is an extension for Flask that adds support for SQLAlchemy to your application. It aims to simplify using SQLAlchemy with Flask.
+- [Tailwind](https://tailwindcss.com/) is a utility-first CSS framework for rapidly building custom user interfaces.
 
-2)In December, the average temperature was 71 degrees with the upper quartile being 74 degrees which is on the upper end of the standard deviation which means that in general in December we have fairly constant good whether from 71 to 74 degrees and it even peaks in the low 80's, which makes December weather adequate surfing weather
+- Using well organized directories with comments
+  - /notebooks # Holding climate_analysis.ipynb & SurfsUp_Challenge.ipynb
+  - /resources # Folder of graphs created from the exploratory climate analysis
+  - /templates # Jinja2 HTML template files with Tailwind
+  - .editorconfig # .editorconfig to power some workflows in VS Code.
+  - .gitignore # .gitignore
+  - app_refactored # The flask app using the libraries above
+  - app.py # The Module's Flask app but running through connextion
+  - database.py # Following some basic best practice of breaking the functions into modules.
+  - hawaii.db # Raw weather data
+  - models.py # I went against the grain and practiced the declarative version of SQLAlchemy
+  - openapi.yaml # This file is the actual file that connextion to power a proper OpenAPI spec and UI
 
-3)On both sides of the year, summer and winter respectively, the weather if fairly similar with averages only being 4 degrees apart in the 70's and having similar max temperature in the 80's which would imply that the temperatures don't get extreme.
+## Usage
 
-## Further Data
-Other data to look into would be days of rain and which days rain along with queries on how many stations are reporting to talk about quality of data collected
+```powershell
+PS ~/surfs-up/> $env:FLASK_APP = 'app'
+PS ~/surfs-up/> $env:FLASK_ENV = 'development'
+PS ~/surfs-up/> python app.py
+```
+
+## Endpoints
+
+/api/v1.0/precipitation
+/api/v1.0/stations
+/api/v1.0/tobs
+/api/v1.0/temp/2017-06-01/2017-06-30
+
+## Data Powering the Web app
+
+Using Python and SQLAlchemy in jupyter notebook to do basic climate analysis and data exploration of our hawaii.db database.
+
+The module and module Challenge were basically Exploratory Climate Analysis:
+
+- Script a query to retrieve the last 12 months of precipitation data.
+- Select only the date and prcp values.
+- Load the query results into a Pandas DataFrame and set the index to the date column.
+- Sort the DataFrame values by date.
+- Plot the results using the DataFrame plot method.
+- Use Pandas to print the summary statistics for the precipitation data.
+
+... included in the climate_analysis.ipynb & SurfsUp_Challenge.ipynb files. The code from the notebooks were used in app.py to power the endpoints in Flask, including the calc_temps function that accepts a start date and end date in the format %Y-%m-%d and return the minimum, average, and maximum temperatures for that range of dates.
+
+## Analysis
+
+
+
+## Todo Checklist
+
+A helpful checklist to gauge how your README is coming on what I would like to finish:
+
+- [ ] Finish the last three endpoints in pure openapi format.
+
+## Contributing
+
+Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
+
+Please make sure to update tests as appropriate.
+
+## License
+
+[MIT](https://choosealicense.com/licenses/mit/)
