@@ -15,13 +15,25 @@ attribution: 'Map data © <a href="https://www.openstreetmap.org/">OpenStreetMap
 // Then we add our 'graymap' tile layer to the map.
 streets.addTo(map);
 
-//  Add a marker to the map for Los Angeles, California.
-let marker = L.marker([34.0522, -118.2437]).addTo(map);
-
+// import cities from cities.js
+let cityData = cities
+  
 // Add a circle to the map around LA, CA
-L.circleMarker([34.0522, -118.2437], {
-    radius: 300,
-    color: 'black',
-    fillColor: '#ffffa1'
-}).addTo(map);
+//L.circleMarker([34.0522, -118.2437], {
+//    radius: 10,
+//   color: 'black',
+//    fillColor: '#ffffa1'
+//}).addTo(map);
+
+cityData.forEach(function (city) {
+    L.circleMarker(city.location, {
+        radius: city.population / 200000,
+        weight: 4,
+        color: 'orange',
+        //fillColor: '#ffffa1'
+    }).addTo(map);
+    L.marker(city.location)
+        .bindPopup("<h2>" + city.city + ", " + city.state + "</h2> <hr> <h3>Population " + city.population.toLocaleString() + "</h3>")
+        .addTo(map);
+})
 
