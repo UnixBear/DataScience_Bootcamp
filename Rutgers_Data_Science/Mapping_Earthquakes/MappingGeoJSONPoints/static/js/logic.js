@@ -54,7 +54,6 @@ let sanFranAirport = {
         }
     }]
 };
-
 //Add the GeoJSON layer to the map and add data
 L.geoJSON(sanFranAirport, {
     pointToLayer: function (feature, latlng) {
