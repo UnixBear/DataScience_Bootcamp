@@ -32,20 +32,22 @@ let baseMaps = {
 L.control.layers(baseMaps).addTo(map);
 
 //import Toronto data
- 
+const torontoData = "https://raw.githubusercontent.com/UnixBear/DataScience_Bootcamp/Mapping_GeoJSON_Linestrings/Rutgers_Data_Science/Mapping_Earthquakes/Mapping_GeoJSON_Linestrings/torontoRoutes.json" 
 
-// import json data from github repo
-let airportData = "https://raw.githubusercontent.com/UnixBear/DataScience_Bootcamp/Mapping_GeoJSON_Points/Rutgers_Data_Science/Mapping_Earthquakes/majorAirports.json";
+//creating a style for the linestrings
+const myStyle = {
+    color: "FFFACD",
+    weight: 2
+}
 // Grabbing GeoJson data
-d3.json(airportData).then(function(data) {
+d3.json(torontoData).then(function(data) {
     console.log(data);
     // Create a GeoJSON layer with the retrieved data
     var myLayer = L.geoJson(data, {
-        style: function (feature) {
-            return feature.properties.style;
-        },
+        
+        style: myStyle,
         onEachFeature: function (feature, layer) {
-            layer.bindPopup("</h2>Airport ID" + feature.properties.id + "</h2><hr><h2>Airport Name: " + feature.properties.name + "</h2>");
+            layer.bindPopup("</h2>Airline:" + feature.properties.airline + "</h2><hr><h2>Destination: " + feature.properties.dst + "</h2>");
         }
     });
     myLayer.addTo(map)
