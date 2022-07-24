@@ -95,6 +95,34 @@ function getRadius(magnitude) {
 	return (magnitude * 4);
   }
 
+// Create a legend control object
+var legend = L.control({position: 'bottomright'});
+
+legend.onAdd = function () {
+
+    var div = L.DomUtil.create('div', 'info legend');
+	const magnitudes = [0, 1, 2, 3, 4, 5];
+	const colors = [
+	"#98ee00",
+	"#d4ee00",
+	"#eecc00",
+	"#ee9c00",
+	"#ea822c",
+	"#ea2c2c"
+	];
+
+    // loop through our density intervals and generate a label with a colored square for each interval
+    for (var i = 0; i < magnitudes.length; i++) {
+        div.innerHTML +=
+			"<i style='background: " + colors[i] + "'></i> " +
+            magnitudes[i] + (magnitudes[i + 1] ? '&ndash;' + magnitudes[i + 1] + '<br>' : '+');
+    }
+
+    return div;
+};
+
+legend.addTo(map);
+
 // Grabbing GeoJson data
 d3.json("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geojson").then(function(data) {
     console.log(data);
