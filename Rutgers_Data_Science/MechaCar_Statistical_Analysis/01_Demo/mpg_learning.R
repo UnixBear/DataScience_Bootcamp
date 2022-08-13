@@ -102,3 +102,72 @@ plt + geom_boxplot() + facet_wrap(vars(MPG_Type)) + #create multiple boxplots, o
 mpg_summary_trans <- mpg %>% group_by(trans, year) %>% summarize(Mean_Cty=mean(cty), Mean_Hwy=mean(hwy), .groups = 'keep')
 plt <- ggplot(mpg_summary_trans, aes(x=trans, y=factor(year), fill=Mean_Cty))
 plt + geom_tile() + labs(x="Transmission Type", y="Year", fill="Mean City (MPG)") + theme(axis.text.x=element_text(angle=45, hjust=1))
+
+#we can use the cor() function to produce a correlation matrix. A correlation 
+#matrix is a lookup table where the variable names of a data frame are stored 
+#as rows and columns, and the intersection of each variable is the corresponding
+#Pearson correlation coefficient. We can use the cor() function to produce a 
+#correlation matrix by providing a matrix of numeric vectors.
+
+#if we want to produce a correlation matrix for our used_cars dataset, we would
+#first need to select our numeric columns from our data frame and convert to a
+#matrix. Then we can provide our numeric matrix to the cor() function
+used_cars <- read.csv('used_car_data.csv')
+used_matrix <- as.matrix(used_cars[,c("Selling_Price","Present_Price","Miles_Driven")]) #convert data frame into numeric matrix
+cor(used_matrix)
+
+#to get metrics for our model, we'll use lm() to construct the linear model.
+lm(qsec ~ hp,mtcars) #create linear model
+#based off this, the equation for the line is qsec = -0.02hp + 20.56
+
+#To determine our p-value and our r-squared value for a simple linear regression
+#model, we'll use the summary() function
+summary(lm(qsec~hp,mtcars)) #summarize linear model
+#since the multiple r^2 output was 0.5016 (~50%), it means that roughly 50% of
+#the variablilty of our dependent variable (quarter-mile time predictions) is
+#explained using this linear model.
+
+#we need to calculate the data points to use for our line plot using our 
+#lm(qsec ~ hp,mtcars) coefficients
+model <- lm(qsec ~ hp,mtcars) #create linear model
+yvals <- model$coefficients['hp']*mtcars$hp +
+  model$coefficients['(Intercept)'] #determine y-axis values from linear model
+
+#finally we plot
+plt <- ggplot(mtcars,aes(x=hp,y=qsec)) #import dataset into ggplot2
+plt + geom_point() + geom_line(aes(y=yvals), color = "red") #plot scatter and linear model
+#Using our visualization in combination with our calculated p-value and r-squared value, we have determined that there is a significant relationship between horsepower and quarter-mile time.
+
+#Although the relationship between both variables is statistically significant,
+#this linear model is not ideal. According to the calculated r-squared value,
+#using only quarter-mile time to predict horsepower is roughly as accurate as
+#guessing using a coin toss. In other words, the variability we observed within
+#our horsepower data must come from multiple sources of variance. To accurately
+#predict future horsepower observations, we need to use a more robust model.
+#To better predict the quarter-mile time (qsec) dependent variable, we can add
+#other variables of interest such as fuel efficiency (mpg), engine size (disp),
+#rear axle ratio (drat), vehicle weight (wt), and horsepower (hp) as independent
+#variables to our multiple linear regression model.
+lm(qsec ~ mpg + disp + drat + wt + hp,data=mtcars) #generate multiple linear regression model
+# According to our results, vehicle weight and horsepower (as well as intercept)
+#are statistically unlikely to provide random amounts of variance to the linear
+#model. In other words the vehicle weight and horsepower have a significant
+#impact on quarter-mile race time. When an intercept is statistically
+#significant, it means that the intercept term explains a significant amount of
+#variability in the dependent variable when all independent vairables are equal
+#to zero. Despite the number of significant variables, the multiple linear
+#regression model outperformed the simple linear regression. According to the
+#summary output, the r-squared value has increased from 0.50 in the simple
+#linear regression model to 0.71 in our multiple linear regression model while
+#the p-value remained significant.
+
+#If the success metric is numerical and the sample size is small, a z-score 
+  #summary statistic can be sufficient to compare the mean and variability of
+  #both groups.
+#If the success metric is numerical and the sample size is large, a two-sample
+  #t-test should be used to compare the distribution of both groups.
+#If the success metric is categorical, you may use a chi-squared test to
+  #compare the distribution of categorical values between both groups.
+#please see: http://www.statsoft.com/Textbook/Power-Analysis
+# and https://www.statisticssolutions.com/dissertation-resources/sample-size-calculation-and-sample-size-justification/statistical-power-analysis/
+# for outlining how to perform power analysis
